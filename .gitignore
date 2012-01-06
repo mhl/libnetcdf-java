@@ -3,3 +3,7 @@
 *~
 /cdm/target
 /*-stamp
+/debian/files
+/debian/libnetcdf-core-java.debhelper.log
+/debian/libnetcdf-core-java.substvars
+/debian/libnetcdf-core-java
