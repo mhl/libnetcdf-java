@@ -81,18 +81,15 @@
   </path>
 
   <!-- Libraries -->
-  <fileset id="compile.libraries" dir="${lib.dir}">
-    <include name="external/${bdb.jar}"/>
-    <include name="external/${ehcache.jar}"/>
-    <include name="release/${grib.jar}"/>
-    <include name="release/${opendap.jar}"/>
-    <include name="external/${httpclient3.jar}"/>
-    <include name="external/${jdom.jar}"/>
-    <include name="external/${loggingAPI.jar}"/>
-    <include name="external/${protobuf.jar}"/>
-    <include name="external/${quartz.jar}"/>
-    <include name="release/${visadNoDods.jar}"/>
-    <include name="external/${stax.jar}"/>
+  <fileset id="compile.libraries" dir="/usr/share/java/">
+    <include name="jdom1.jar"/>
+    <include name="commons-httpclient.jar"/>
+    <include name="slf4j-api.jar"/>
+    <include name="db-je.jar"/>
+    <include name="quartz.jar"/>
+    <include name="ehcache.jar"/>
+    <include name="protobuf.jar"/>
+    <include name="jna.jar"/>
   </fileset>
 
   <!-- ToDo Remove, not used? -->
