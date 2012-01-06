@@ -1,0 +1,24 @@
+Source: libnetcdf-java
+Section: java
+Priority: extra
+Maintainer: Mark Longair <mhl@pobox.com>
+Build-Depends: debhelper (>= 7), ant
+Standards-Version: 3.8.3
+Homepage: http://www.unidata.ucar.edu/software/netcdf-java/
+
+Package: libnetcdf-core-java
+Architecture: all
+Depends: libjdom1-java, libcommons-httpclient-java,
+ libslf4j-java, libdb-je-java, libquartz-java, libehcache-java,
+ libprotobuf-java (>= 2.3), libjna-java
+Description: A Java interface to NetCDF files
+ The NetCDF-Java library implements a Common Data Model (CDM), a
+ generalization of the NetCDF, OpenDAP and HDF5 data models. The
+ library is a prototype for the NetCDF-4 project, which provides
+ a C language API for the "data access layer" of the CDM, on top
+ of the HDF5 file format. The NetCDF-Java library is a 100% Java
+ framework for reading netCDF and other file formats into the
+ CDM, as well as writing to the netCDF-3 file format. The
+ NetCDF-Java library also implements NcML, which allows you to
+ add metadata to CDM datasets, as well as to create virtual
+ datasets through aggregation.

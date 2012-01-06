@@ -1,0 +1,5 @@
+libnetcdf-java (4.2) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Mark Longair <mhl@pobox.com>  Fri, 06 Jan 2012 16:10:20 +0100

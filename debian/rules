@@ -1,0 +1,107 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+#
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+#
+# Modified to make a template file for a multi-binary package with separated
+# build-arch and build-indep targets  by Bill Allombert 2001
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+VERSION_IN_CHANGELOG=$(shell dpkg-parsechangelog | egrep ^Version: | sed "s/Version: //")
+PACKAGE_IN_CHANGELOG=$(shell dpkg-parsechangelog | egrep ^Source: | sed "s/Source: //")
+
+CWD_BASENAME=$(shell basename `readlink -n -f .`)
+REQUIRED_DIRECTORY_NAME=${PACKAGE_IN_CHANGELOG}-${VERSION_IN_CHANGELOG}
+
+prebuild-actions :
+	@if test $(CWD_BASENAME) != $(REQUIRED_DIRECTORY_NAME); then \
+		echo "Warning: the current directory name ($(CWD_BASENAME)) does not match" && \
+		echo "the package name and version in the new changelog." && \
+		echo "Rename this directory to: $(REQUIRED_DIRECTORY_NAME)" && \
+		false; fi
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export DESTDIR=$(CURDIR)/debian/libnetcdf-core-java
+
+INDEP_STAMPS=libnetcdf-java-packindep-stamp
+
+configure : configure-stamp
+
+configure-stamp :
+	dh_testdir
+	touch configure-stamp
+
+build : prebuild-actions build-indep
+
+build-indep : build-indep-stamp
+
+build-indep-stamp : configure-stamp
+	( cd cdm && ant makeCore )
+	touch $@
+
+clean : prebuild-actions
+	dh_testdir
+	dh_testroot
+	rm -f build-indep-stamp configure-stamp install-indep-stamp
+	rm -f $(INDEP_STAMPS)
+	( cd cdm && ant clean )
+	rm -rf $(DESTDIR)/*
+	dh_clean
+
+install : install-indep-stamp
+	echo '#### Install was found'
+
+install-indep-stamp : build-indep-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+	install -d $(DESTDIR)/usr/share/java/
+	install -m 644 cdm/target/ncCore-4.2.jar $(DESTDIR)/usr/share/java/
+	ln -s ncCore-4.2.jar $(DESTDIR)/usr/share/java/ncCore.jar
+	dh_install -i
+	touch install-indep-stamp
+
+%-packindep-stamp : build-indep-stamp install-indep-stamp
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_python
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_perl
+#	dh_makeshlibs
+	dh_installdeb
+#	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+	touch $@
+
+binary-indep : $(INDEP_STAMPS)
+
+binary : binary-indep
+
+.PHONY : build clean binary-indep binary install install-indep configure prebuild-actions
