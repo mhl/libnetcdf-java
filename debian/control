@@ -4,7 +4,8 @@ Priority: extra
 Maintainer: Mark Longair <mhl@pobox.com>
 Build-Depends: debhelper (>= 7), ant, libjdom1-java,
  libcommons-httpclient-java, libslf4j-java, libdb-je-java,
- libquartz-java, libehcache-java, libprotobuf-java (>= 2.3),
+ libquartz-java, libehcache-java,
+ libprotobuf-java (>= 2.3), libprotobuf-java (<< 2.4),
  libjna-java
 Standards-Version: 3.8.3
 Homepage: http://www.unidata.ucar.edu/software/netcdf-java/
@@ -13,7 +14,8 @@ Package: libnetcdf-core-java
 Architecture: all
 Depends: libjdom1-java, libcommons-httpclient-java,
  libslf4j-java, libdb-je-java, libquartz-java, libehcache-java,
- libprotobuf-java (>= 2.3), libjna-java
+ libprotobuf-java (>= 2.3), libprotobuf-java (<< 2.4),
+ libjna-java
 Description: A Java interface to NetCDF files
  The NetCDF-Java library implements a Common Data Model (CDM), a
  generalization of the NetCDF, OpenDAP and HDF5 data models. The
