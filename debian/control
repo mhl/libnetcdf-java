@@ -2,7 +2,10 @@ Source: libnetcdf-java
 Section: java
 Priority: extra
 Maintainer: Mark Longair <mhl@pobox.com>
-Build-Depends: debhelper (>= 7), ant
+Build-Depends: debhelper (>= 7), ant, libjdom1-java,
+ libcommons-httpclient-java, libslf4j-java, libdb-je-java,
+ libquartz-java, libehcache-java, libprotobuf-java (>= 2.3),
+ libjna-java
 Standards-Version: 3.8.3
 Homepage: http://www.unidata.ucar.edu/software/netcdf-java/
 
