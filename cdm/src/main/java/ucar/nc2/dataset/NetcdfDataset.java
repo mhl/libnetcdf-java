@@ -32,7 +32,7 @@
  */
 package ucar.nc2.dataset;
 
-import ucar.unidata.util.EscapeStrings;
+import ucar.nc2.util.net.EscapeStrings;
 import ucar.nc2.util.net.HTTPMethod;
 import ucar.nc2.util.net.HTTPSession;
 import ucar.ma2.*;
@@ -652,7 +652,6 @@ public class NetcdfDataset extends ucar.nc2.NetcdfFile {
 
     if (location.startsWith("dods:")) {
         return acquireDODS(cache, factory, hashKey, location, buffer_size, cancelTask, spiObject);  // open through DODS
-
     } else if ( location.startsWith("file:") && (
                location.endsWith(".dds")
                || location.endsWith(".das")
@@ -672,21 +671,18 @@ public class NetcdfDataset extends ucar.nc2.NetcdfFile {
         throw new IOException(log.toString());
       return ncfile;
 
-      // http: may be dods or cdmremote or HttpService
+    } else if (location.endsWith(".xml") || location.endsWith(".ncml")) { //open as a NetcdfDataset through NcML
+      if (!location.startsWith("http:") && !location.startsWith("file:"))
+        location = "file:" + location;
+      return acquireNcml(cache, factory, hashKey, location, buffer_size, cancelTask, spiObject);
+
     } else if (location.startsWith("http:")) {
       ServiceType stype = disambiguateHttp(location);
       if (stype == ServiceType.OPENDAP)
         return acquireDODS(cache, factory, hashKey, location, buffer_size, cancelTask, spiObject); // try as a dods file
       else if (stype == ServiceType.CdmRemote)
         return acquireRemote(cache, factory, hashKey, location, buffer_size, cancelTask, spiObject);  // open through CDM remote
-    // else fall through for HttpService
-    }
-
-    // ncml file
-    if (location.endsWith(".xml") || location.endsWith(".ncml")) { //open as a NetcdfDataset through NcML
-      if (!location.startsWith("http:") && !location.startsWith("file:"))
-        location = "file:" + location;
-      return acquireNcml(cache, factory, hashKey, location, buffer_size, cancelTask, spiObject);
+      // else fall through for HttpService
     }
 
     if (cache != null) {

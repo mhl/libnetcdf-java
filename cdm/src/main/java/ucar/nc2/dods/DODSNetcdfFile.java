@@ -32,7 +32,7 @@
  */
 package ucar.nc2.dods;
 
-import ucar.unidata.util.EscapeStrings;
+import ucar.nc2.util.net.EscapeStrings;
 import ucar.ma2.*;
 import ucar.nc2.*;
 import ucar.nc2.Attribute;
@@ -352,13 +352,6 @@ public class DODSNetcdfFile extends ucar.nc2.NetcdfFile {
       dodsConnection = null;
     }
 
-  }
-
-  @Override
-  public boolean sync() throws IOException {
-    unlocked = false;
-
-    return (spi != null) && spi.sync();
   }
 
   /* parse the DDS, creating a tree of DodsV objects

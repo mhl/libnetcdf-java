@@ -167,7 +167,7 @@ public class HttpUriResolver
   {
     if(session == null)
         session = new HTTPSession();
-    //WRONG session.setConnectionManagerTimeout( this.connectionTimeout );
+    session.setConnectionManagerTimeout( this.connectionTimeout );
     session.setSoTimeout( this.socketTimeout );
     HTTPMethod method = session.newMethodGet( uri.toString() );
     method.setFollowRedirects( this.followRedirects );

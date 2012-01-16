@@ -23,10 +23,7 @@ import java.util.Vector;
  */
 
 public class HTTPSession {
-
   static int DFALTTHREADCOUNT = 50;
-  static int DFALTTIMEOUT = 5*60*1000; // 5 minutes in milliseconds
-
   static public int SC_NOT_FOUND = HttpStatus.SC_NOT_FOUND;
   static public int SC_UNAUTHORIZED = HttpStatus.SC_UNAUTHORIZED;
   static public int SC_OK = HttpStatus.SC_OK;
@@ -59,11 +56,6 @@ public class HTTPSession {
   protected static String globalAgent = "/NetcdfJava/HttpClient3";
 
   protected static int threadcount = DFALTTHREADCOUNT;
-  protected static int globalSoTimeout = DFALTTIMEOUT;
-
-  protected static String globalsimpleproxyhost = null;
-  protected static int globalsimpleproxyport = 0;
-
   protected static List<HTTPSession> sessionList; // List of all HTTPSession instances
 
   static {
@@ -72,14 +64,10 @@ public class HTTPSession {
     globalProvider = null;
     //fix: schemes.register(new Scheme("http", PlainSocketFactory.getSocketFactory(),80));
     connmgr = new MultiThreadedHttpConnectionManager();
-    setGlobalThreadCount(DFALTTHREADCOUNT);
+    setThreadCount(DFALTTHREADCOUNT);
     // allow self-signed certificates
     Protocol.registerProtocol("https", new Protocol("https", new EasySSLProtocolSocketFactory(), 443));
     sessionList = new ArrayList<HTTPSession>(); // see kill function
-    // For IDV, force Connection manager timeout to be very large
-    setGlobalConnectionTimeout(DFALTTIMEOUT);
-    setGlobalSoTimeout(DFALTTIMEOUT);
-    setGlobalSimpleProxy();
   }
 
   static enum Methods {
@@ -111,25 +99,12 @@ public class HTTPSession {
     return globalAgent;
   }
 
-  static public void setGlobalConnectionTimeout(long timeout) {
-    connmgr.getParams().setConnectionTimeout((int) timeout);
-  }
-
-  @Deprecated
-  static public void setConnectionManagerTimeout(long timeout) {
-    setGlobalConnectionTimeout(timeout);
-  }
-
-  static public void setGlobalSoTimeout(int timeout) {
-    globalSoTimeout = timeout;
-  }
-
-  public static void setGlobalThreadCount(int nthreads) {
+  public static void setThreadCount(int nthreads) {
     connmgr.getParams().setMaxTotalConnections(nthreads);
     connmgr.getParams().setDefaultMaxConnectionsPerHost(nthreads);
   }
 
-  public static int getGlobalThreadCount() {
+  public static int getThreadCount() {
     return connmgr.getParams().getMaxTotalConnections();
   }
 
@@ -144,7 +119,7 @@ public class HTTPSession {
     // Rebuild the connection manager
     connmgr.shutdown();
     connmgr = new MultiThreadedHttpConnectionManager();
-    setGlobalThreadCount(DFALTTHREADCOUNT);
+    setThreadCount(DFALTTHREADCOUNT);
 
   } ////////////////////////////////////////////////////////////////////////
 
@@ -170,9 +145,6 @@ public class HTTPSession {
     this.identifier = id;
     try {
       sessionClient = new HttpClient(new HttpClientParams(), connmgr);
-
-      if(globalSoTimeout > 0)
-          setSoTimeout(globalSoTimeout);
 
       // H/T: nick.bower@metoceanengineers.com
       setProxy();
@@ -206,9 +178,12 @@ public class HTTPSession {
       sessionClient.getParams().setParameter(USER_AGENT, useragent);
   }
 
+  public void setConnectionManagerTimeout(long timeout) {
+    connmgr.getParams().setConnectionTimeout((int) timeout);
+  }
 
   public void setSoTimeout(int timeout) {
-        sessionClient.getParams().setSoTimeout(timeout);
+    sessionClient.getParams().setSoTimeout(timeout);
   }
 
   public void setGlobalMethodParameter(String name, Object value) {
@@ -346,56 +321,5 @@ public class HTTPSession {
     }
 
   }
-//////////////////////////////////////////////////
-// Simple (not authenticating proxy support)
-
-// For backward compatibility, provide
-// programmatic access for setting proxy info
-
-// Extract proxy info from command line -D parameters
-// H/T: nick.bower@metoceanengineers.com
-static void
-setGlobalSimpleProxy()
-{
-    String host = System.getProperty("http.proxyHost");
-    String port = System.getProperty("http.proxyPort");
-    if(host != null && port != null) {
-        host = host.trim();
-        if(host.length() == 0) host = null;
-        int portno = 0;
-        if(port != null) {
-            port = port.trim();
-            if(port.length() > 0) {
-                try {
-                    portno = Integer.parseInt(port);
-                } catch (NumberFormatException nfe) {portno = 0;}
-            }
-        }
-        setGlobalSimpleProxy(host,portno);
-    }
-}
-
-    void
-    setSimpleProxy()
-    {
-        if(globalsimpleproxyhost == null) return;
-        setSimpleProxy(globalsimpleproxyhost,globalsimpleproxyport);
-    }
-
-    // These are externally visible
-
-    static synchronized public void
-    setGlobalSimpleProxy(String proxyhost, int proxyport)
-    {
-        globalsimpleproxyhost = proxyhost;
-        globalsimpleproxyport = proxyport;
-    }
-
-    public void
-    setSimpleProxy(String host, int port)
-    {
-        if(sessionClient == null) return;
-        sessionClient.getHostConfiguration().setProxy(host, port);
-    }
 
 }

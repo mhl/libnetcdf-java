@@ -65,8 +65,8 @@ install-indep-stamp : build-indep-stamp
 	dh_clean -k -i
 	dh_installdirs -i
 	install -d $(DESTDIR)/usr/share/java/
-	install -m 644 cdm/target/ncCore-4.2.jar $(DESTDIR)/usr/share/java/
-	ln -s ncCore-4.2.jar $(DESTDIR)/usr/share/java/ncCore.jar
+	install -m 644 cdm/target/ncCore-4.3.jar $(DESTDIR)/usr/share/java/
+	ln -s ncCore-4.3.jar $(DESTDIR)/usr/share/java/ncCore.jar
 	dh_install -i
 	touch install-indep-stamp
 

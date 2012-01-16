@@ -53,7 +53,7 @@ import java.util.*;
  * @author edavis
  * @since Jun 8, 2005 15:34:04 -0600
  */
-public class CrawlableDatasetFile implements CrawlableDataset, CheckableForFileRepresentation
+public class CrawlableDatasetFile implements CrawlableDataset
 {
   static private org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CrawlableDatasetFile.class);
   //private static Log log = LogFactory.getLog( CrawlableDatasetFile.class );
@@ -154,39 +154,43 @@ public class CrawlableDatasetFile implements CrawlableDataset, CheckableForFileR
 //    return newPath;
   }
 
-  public boolean canRepresentAsFile() {
-    return true;
-  }
   /**
    * Provide access to the java.io.File that this CrawlableDataset represents.
    *
    * @return the java.io.File that this CrawlableDataset represents.
    */
-  public File getFile() {
+  public File getFile()
+  {
     return file;
   }
 
-  public Object getConfigObject() {
+  public Object getConfigObject()
+  {
     return configObj;
   }
 
-  public String getPath() {
+  public String getPath()
+  {
     return normalizePath( this.file.getPath());
   }
 
-  public String getName() {
+  public String getName()
+  {
     return this.file.getName();
   }
 
-  public boolean exists() {
+  public boolean exists()
+  {
     return file.exists() && file.canRead();
   }
 
-  public boolean isCollection() {
+  public boolean isCollection()
+  {
     return( file.isDirectory());
   }
 
-  public CrawlableDataset getDescendant( String relativePath) {
+  public CrawlableDataset getDescendant( String relativePath)
+  {
     if ( relativePath.startsWith( "/" ) )
       throw new IllegalArgumentException( "Path must be relative <" + relativePath + ">." );
     return new CrawlableDatasetFile( this, relativePath );

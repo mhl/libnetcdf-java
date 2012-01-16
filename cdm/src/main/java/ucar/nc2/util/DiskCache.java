@@ -32,7 +32,7 @@
  */
 package ucar.nc2.util;
 
-import ucar.unidata.util.EscapeStrings;
+import ucar.nc2.util.net.EscapeStrings;
 import ucar.unidata.util.StringUtil;
 
 import java.io.*;
@@ -209,6 +209,7 @@ public class DiskCache {
         // cant write to it - drop through
       }
 
+      // debug
       return getCacheFile(fileLocation);
     }
   }

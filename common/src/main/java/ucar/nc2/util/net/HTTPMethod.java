@@ -11,8 +11,6 @@ import org.apache.commons.httpclient.methods.*;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.slf4j.*;
-import ucar.unidata.util.EscapeStrings;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,40 +23,13 @@ import ucar.unidata.util.EscapeStrings;
 /* This class is not thread safe */
 public class HTTPMethod
 {
-
-    //////////////////////////////////////////////////
-    // Define a Retry Handler that supports more retries and is verbose.
-
-    static private org.slf4j.Logger LOG = null;
-
-
-    static public class RetryHandler extends  org.apache.commons.httpclient.DefaultHttpMethodRetryHandler
-    {
-        static final int MAXRETRIES = 10;
-	static final boolean verbose = false;
-
-        public RetryHandler() {super(MAXRETRIES,false);}
-        public boolean retryMethod(final org.apache.commons.httpclient.HttpMethod method,
-                                   final IOException exception,
-                                   int executionCount)
-        {
-	    if(verbose) {
-	        if(LOG == null) LOG = org.slf4j.LoggerFactory.getLogger(HTTPMethod.class);
-		LOG.info(String.format("Retry: count=%d exception=%s\n",executionCount, exception.toString()));
-	    }
-	    return super.retryMethod(method,exception,executionCount);
-        }
-    }
-
-    //////////////////////////////////////////////////
-
-    HTTPSession session = null;
-    HttpMethodBase method = null; // Current method
-    String uri = null;
-    List<Header> headers = new ArrayList<Header>();
-    HashMap<String,Object> params = new HashMap<String,Object>();
+     HTTPSession session = null;
+     HttpMethodBase method = null; // Current method
+     String uri = null;
+     List<Header> headers = new ArrayList<Header>();
+     HashMap<String,Object> params = new HashMap<String,Object>();
     HttpState context = null;
-    boolean executed = false;
+     boolean executed = false;
     protected boolean closed = false;
     InputStream strm = null;
     RequestEntity content = null;
@@ -151,10 +122,6 @@ public class HTTPMethod
                 for (String key : params.keySet())
                     hmp.setParameter(key,params.get(key));
             }
-
-	    // Change the retry handler
-	    method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,new RetryHandler());
-
             setcontent();
             try {
                 session.sessionClient.executeMethod(method);

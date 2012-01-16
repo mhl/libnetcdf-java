@@ -419,13 +419,4 @@ public class ArrayDouble extends Array {
     }
   }
 
-  public static void main(String[] args) {
-    double[] pressures = new double[23];
-    ArrayDouble.D1 dataGrid = new ArrayDouble.D1(pressures.length);
-
-    for (int i = 0; i < pressures.length; i++) {
-      dataGrid.set(i, pressures[i]);
-    }
-  }
-
 }

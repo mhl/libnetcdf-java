@@ -38,6 +38,7 @@ import java.util.Date;
 /**
  * Date parsing and formatting. Always uses GMT.
  * These are not thread-safe.
+ * These use java.util.Date and java.text.SimpleDateFormat.
  *
  * @author caron
  */
@@ -131,7 +132,7 @@ public class DateFormatter {
    * @return equivalent Date
    * @throws java.text.ParseException if not formatted correctly
    */
-  public Date stdDateTimeFormat(String text) throws java.text.ParseException {
+  private Date stdDateTimeFormat(String text) throws java.text.ParseException {
     text = (text == null) ? "" : text.trim();
     stdDateTimeFormat();
     return stdDateTimeFormat.parse(text);
@@ -143,7 +144,7 @@ public class DateFormatter {
    * @return equivalent Date
    * @throws java.text.ParseException if not formatted correctly
    */
-  public Date stdDateNoSecsFormat(String text) throws java.text.ParseException {
+  private Date stdDateNoSecsFormat(String text) throws java.text.ParseException {
     text = (text == null) ? "" : text.trim();
     stdDateNoSecsFormat();
     return stdDateNoSecsFormat.parse(text);
@@ -155,7 +156,7 @@ public class DateFormatter {
    * @return equivalent Date
    * @throws java.text.ParseException if not formatted correctly
    */
-  public Date isoDateTimeFormat(String text) throws java.text.ParseException {
+  private Date isoDateTimeFormat(String text) throws java.text.ParseException {
     text = (text == null) ? "" : text.trim();
     isoDateTimeFormat();
     return isoDateTimeFormat.parse(text);
@@ -167,7 +168,7 @@ public class DateFormatter {
    * @return equivalent Date
    * @throws java.text.ParseException if not formatted correctly
    */
-  public Date isoDateNoSecsFormat(String text) throws java.text.ParseException {
+  private Date isoDateNoSecsFormat(String text) throws java.text.ParseException {
     text = (text == null) ? "" : text.trim();
     isoDateNoSecsFormat();
     return isoDateNoSecsFormat.parse(text);
@@ -179,7 +180,7 @@ public class DateFormatter {
    * @return equivalent Date
    * @throws java.text.ParseException if not formatted correctly
    */
-  public Date dateOnlyFormat(String text) throws java.text.ParseException {
+  private Date dateOnlyFormat(String text) throws java.text.ParseException {
     text = (text == null) ? "" : text.trim();
     dateOnlyFormat();
     return dateOnlyFormat.parse(text);

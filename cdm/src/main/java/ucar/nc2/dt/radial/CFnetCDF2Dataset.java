@@ -368,14 +368,14 @@ public class CFnetCDF2Dataset extends RadialDatasetSweepAdapter implements Typed
      * _more_
      */
     protected void setStartDate() {
-        startDate = dateUnits.makeDate(time[0]); //new Date((long) time[0]);
+        startDate = new Date((long) time[0]);
     }
 
     /**
      * _more_
      */
     protected void setEndDate() {
-        endDate = dateUnits.makeDate(time[time.length - 1]); //new Date((long) time[time.length - 1]);
+        endDate = new Date((long) time[time.length - 1]);
     }
 
     /**

@@ -65,7 +65,7 @@ public class Suomi extends CoordSysBuilder {
     Variable v = ncfile.findVariable("time_offset");
     if (v == null || !v.isCoordinateVariable()) return false;
     String desc = v.getDescription();
-    if (desc == null || (!desc.equals("Time delta from start_time") && !desc.equals("PWV window midpoint time delta from start_time"))) return false;
+    if (desc == null || !desc.equals("Time delta from start_time")) return false;
 
     if (null == ncfile.findGlobalAttribute( "start_date")) return false;
     if (null == ncfile.findGlobalAttribute( "start_time")) return false;
